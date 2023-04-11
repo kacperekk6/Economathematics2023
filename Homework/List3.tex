@@ -30,7 +30,7 @@
 
     \item \textbf{Ex 7} Find the expression for $\nu$ in the Black-Scholes market.
 
-    \item \textbf{Ex 7} Find the expression for $\rho$ in the Black-Scholes market.
+    \item \textbf{Ex 8} Find the expression for $\rho$ in the Black-Scholes market.
 \end{enumerate}
 
 \item \textbf{Greek letter definitions} In this section I present definitions of the greeks in finance \cite{Yu2013OnDO}
@@ -106,7 +106,7 @@
 with coefficients:
 \begin{equation}
 \begin{split}\label{d}
-     d_1 &= \frac{1}{\sigma\sqrt{T}}\left[\log\left(\frac{S_t}{K}\right) + \left(r + \frac{\sigma^2}{2}\right)(T)\right], \\
+     d_1 &= \frac{1}{\sigma\sqrt{T}}\left[\log\left(\frac{S_t}{K}\right) + \left(r + \frac{\sigma^2}{2}\right)T\right], \\
      d_2 &= d_1 - \sigma\sqrt{T}. \\
 \end{split}
 \end{equation}
@@ -120,7 +120,7 @@ In \eqref{pc} $\Phi(d)$ stands for standard, normal cumulative distribution func
 
 Definitions of $C$ and $P$ are related to each other via so called put-call parity
 
-\begin{equation}
+\begin{equation}\label{pcparity}
     P = C + K e^{-rT}
 \end{equation}
 
@@ -142,11 +142,19 @@ In this section i provide proofs for some important identities that are used in 
     \end{equation}
     \textbf{Proof}: Differentiating both sides of \eqref{d} with respect to $\sigma$ leads to \eqref{help2}.  $\blacksquare$
 
+    \item Partial derivative of European Put Option (with respect to arbitrary parameter $x$) as a function of derivative of European Call Option
+    \begin{equation}\label{identity11}
+        \frac{\partial P}{\partial x} = \frac{\partial C}{\partial x} + \frac{\partial }{\partial x} \left( K e^{-rT} \right)
+    \end{equation}
+
+    \textbf{Proof}: It is obvious after differentiating both sides of put call parity \eqref{pcparity}. $\blacksquare$
+
     \item Relation between PDFs $\varphi(d_1)$ and $\varphi(d_2)$
     \begin{equation}\label{identity1}
         \varphi(d_2) =\frac{S_0}{K} e^{rT} \varphi(d_1)
     \end{equation}
-    \textbf{Proof}: It is trival that difference of squares
+
+    \textbf{Proof}: It is trivial that difference of squares
     
     \begin{equation}
         d_2^2 - d_1^2 = (d_2-d_1)(d_2 + d_1).
@@ -174,7 +182,7 @@ In this section i provide proofs for some important identities that are used in 
     \end{split}
     \end{equation}
 
-    Combining equations \eqref{identity0} and \eqref{identity2}
+    Combining equations \eqref{identity0}, \eqref{identity2} and performing some $\exp$-$\log$ tricks we obtain
 
     \begin{equation}
     \begin{split}
@@ -293,11 +301,72 @@ Now using identities \eqref{help2} and \eqref{identity1}
 \end{split}
 \end{equation}
 
+\item \textbf{Ex 8} Derivation of $\rho$
+
+By the definition \eqref{rho_c} we have:
+
+\begin{equation}
+\begin{split}\label{rho_c1}
+    \rho_C & = \frac{\partial C}{\partial r} = \frac{\partial }{\partial r} \left[ \Phi(d_1)S_0 - \Phi(d_2)Ke^{-rT} \right] \\
+        &= \frac{\partial \Phi(d_1)}{\partial d_1}  \frac{\partial d_1}{\partial r} S_0 - 
+        \frac{\partial \Phi(d_2)}{\partial d_2}  \frac{\partial d_2}{\partial r} Ke^{-rT}
+        +\Phi(d_2) \frac{\partial }{\partial r} \left( K e^{-rT}\right)\\
+        &= \varphi(d_1)  \frac{\partial d_1}{\partial r} S_0 - 
+        \varphi(d_2)  \frac{\partial d_2}{\partial r} Ke^{-rT}
+        + \Phi(d_2) kT e^{-rT}.
+\end{split}
+\end{equation}
+
+The derivatives $\frac{\partial d_2}{\partial r} = \frac{\partial d_1}{\partial r}$ are equal
+
+\begin{equation}
+\begin{split}\label{derivatives}
+    \frac{\partial d_2}{\partial r} = \frac{\partial d_1}{\partial r} &=
+    \frac{\partial }{\partial r} \left[ \frac{1}{\sigma\sqrt{T}}\left[\log\left(\frac{S_t}{K}\right) + \left(r + \frac{\sigma^2}{2}\right)T\right] \right] \\
+    &= \frac{1}{\sigma \sqrt{T}} + T
+\end{split}
+\end{equation}
+
+
+Now using identity \eqref{identity1} and \eqref{derivatives} 
+
+\begin{equation}
+\begin{split}\label{rho_c2}
+    \rho_C &= \varphi(d_1)  \frac{\partial d_1}{\partial r} S_0 - 
+        \frac{S_0}{K} e^{rT} \varphi(d_1)  \frac{\partial d_2}{\partial r} Ke^{-rT}
+        + \Phi(d_2) kT e^{-rT}\\
+        &=  S_0 \varphi(d_1)  S_0  \left(\frac{1}{\sigma \sqrt{T}} + T \right)- 
+        S_0 \varphi(d_1)   \left(\frac{1}{\sigma \sqrt{T}} + T \right) 
+        + \Phi(d_2) kT e^{-rT}\\
+        &= \Phi(d_2) kT e^{-rT}. \blacksquare
+\end{split}
+\end{equation}
+
 \end{itemize}
+
+
+\item \textbf{Extras} Greeks for European Put Option
+
+Using call-put parity \eqref{pcparity}, \eqref{identity11} and solutions for call options we obtain:
+
+\begin{align}
+    \Delta_P = \Phi(d_1) - 1\\
+    \Gamma_P = \frac{1}{S_0}\frac{\varphi(d_1)}{\sigma  \sqrt{T}}\\
+    \nu_P = \varphi(d_1) S_0 \sqrt{T} \\
+    \rho_P = -T K e^{-rT} \Phi(-d_2)
+\end{align}
+
 \end{enumerate}
 
-\bibliography{bib} 
-\bibliographystyle{ieeetr}
+\begin{thebibliography}{9}
+
+\bibitem{davis2010black}
+Davis, Mark HA, Black-Scholes Formula, Encyclopedia of Quantitative Finance, 199--207, 2010, Chichester: Wiley
+Donald E. Knuth (1986)
+
+\bibitem{Yu2013OnDO}
+Yu, Xisheng and Xie, Xiaoke, On derivations of black-scholes Greek letters, Research Journal of Finance and Accounting, 4-6, 80--85, (2013)
 
 
+\end{thebibliography}
 \end{document}
