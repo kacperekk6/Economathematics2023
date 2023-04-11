@@ -1,0 +1,91 @@
+\documentclass[12pt]{article}
+\usepackage[paper=letterpaper,margin=2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{newtxtext, newtxmath}
+\usepackage{enumitem}
+\usepackage{titling}
+\usepackage[colorlinks=true]{hyperref}
+
+\setlength{\droptitle}{-6em}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{Assignment 1, Solution to exercise 12/L2 Economathematics}
+\author{Kacper Kinastowski}
+\date{\today}
+
+\begin{document}
+\maketitle
+\begin{enumerate}[leftmargin=\labelsep]
+\item \textbf{Exercise 12 } Using Feynman-Kac formula solve the following PDE
+
+\begin{equation}
+\begin{split}\label{pde}
+    \frac{\partial F(x,t)}{\partial t} + \frac{1}{2} \sigma ^ 2 \frac{\partial ^ 2 F(x,t)}{\partial x^2} = 0, \\
+    F(x,T) = x^2,
+\end{split}
+\end{equation}
+
+where The second eq. is so called 'terminal condition' evaluated for time $t = T$. For simplicity we can rewrite our PDE as:
+
+\begin{equation}
+    F_t + \frac{1}{2} \sigma ^ 2 F_{xx} = 0.
+\end{equation}
+
+
+
+
+    \begin{enumerate}
+    \item \textbf{Theorem} Feynmann-Kac formula
+
+        We consider the PDE in a form:
+    
+        \begin{equation}
+            F_t(x,t) + \mu (x,t) F_x (x,t) + \frac{1}{2} \sigma ^2 F_{xx}(x,t) = 0,
+        \end{equation}
+        
+        defined for all $x \in \mathbb{R}$ and $t \in [0, T]$, subject to the terminal condition $F(x,T) = \psi(x)$. According to Feynmann-Kac formula (F-K) this equation has a solution in a form of conditional expectation:
+        
+        \begin{equation}\label{exp}
+            F(x,t) = \mathbb{E} \left[ \psi(X_T) | X_t = x\right],
+        \end{equation}
+        
+        where $X_T$ is a stochastic process at time $t = T$, so that:
+        
+        \begin{equation}\label{ito}
+            d X_t = \mu dt + \sigma dW_t.
+        \end{equation}
+        
+        In other words $X_t$ is an Itô process with drift $\mu$, volatility $\sigma$ and Wiener process $W_t$.
+    
+    \item \textbf{Solution} 
+        
+        In our case 'volatility' term $\sigma$ is constant and $\mu = 0$. According to \eqref{ito} in integral form we obtain simple equation
+        
+        \begin{equation}
+            \int_t^T dX_{\tau} = \sigma \int_t^T dW_{\tau},
+        \end{equation}
+        
+        after elementary integration we obtain
+        
+        \begin{equation}\label{xt}
+            X_t
+            = X_T + \sigma (W_T - W_t) 
+            \sim \mathcal{N} \left( x, \sigma \sqrt{T-t} \right) .
+        \end{equation}
+        
+        Now we substitute \eqref{xt} to F-K formula \eqref{exp} and obtain a solution by calculating conditional expectation:
+        
+        \begin{alignat}{2}
+        F(x,t) &  = \mathbb{E} \left[ \left( X_T + \sigma (W_T - W_t)  \right)^2 | X_t = x\right]  \\[6pt]
+        & = x^2 + \sigma ^2 \mathbb{E} \left[  (W_T - W_t)^2 \right]
+        \\[6pt]
+        &= x^2 + \sigma ^2 (T - t).
+        \end{alignat}
+        
+        We obtained a solution that satisfies both initial PDE \eqref{pde} and terminal condition.
+
+    \end{enumerate}
+\end{enumerate}
+\end{document}

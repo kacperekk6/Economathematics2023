@@ -1,0 +1,303 @@
+
+
+\documentclass[12pt]{article}
+\usepackage[paper=letterpaper,margin=2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{newtxtext, newtxmath}
+\usepackage{enumitem}
+\usepackage{titling}
+\usepackage[colorlinks=true]{hyperref}
+
+\setlength{\droptitle}{-6em}
+
+% Enter the specific assignment number and topic of that assignment below, and replace "Your Name" with your actual name.
+\title{Assignment 2, Solution to exercise 5/L3 Economathematics}
+\author{Kacper Kinastowski}
+\date{\today}
+
+\begin{document}
+\maketitle
+\begin{enumerate}[leftmargin=\labelsep]
+
+\item \textbf{Exercise description} 
+
+\begin{enumerate}
+    \item \textbf{Ex 5} Find the expression for $\Delta$ in the Black-Scholes market.
+
+    \item \textbf{Ex 6} Find the expression for $\Gamma$ in the Black-Scholes market.
+
+    \item \textbf{Ex 7} Find the expression for $\nu$ in the Black-Scholes market.
+
+    \item \textbf{Ex 7} Find the expression for $\rho$ in the Black-Scholes market.
+\end{enumerate}
+
+\item \textbf{Greek letter definitions} In this section I present definitions of the greeks in finance \cite{Yu2013OnDO}
+
+\begin{enumerate}
+    \item \textbf{Delta} Let $\Delta$ be a rate of change of option value $V$ with respect to the change in the asset price $S_0$
+
+    \begin{equation}
+        \Delta = \frac{\partial V}{\partial S_0}
+    \end{equation}
+    
+    In the next steps we are going to prove that for European Call Option
+    
+    \begin{equation}
+        \Delta_C = \frac{\partial C}{\partial S_0} = \Phi(d_1)
+    \end{equation}
+
+    \item \textbf{Gamma} Let $\Delta$ be a rate of change of $\Delta$ with respect to the change in the asset price $S_0$. In other words
+
+    \begin{equation}
+        \Gamma = \frac{\partial \Delta}{\partial S_0} 
+        = \frac{\partial^2 V}{\partial S_0^2}
+    \end{equation}
+
+    In the next steps we are going to prove that for European Call Option
+    
+    \begin{equation}
+        \Gamma_C = \frac{\partial \Delta_C}{\partial S_0}  =
+        \frac{\partial^2 C}{\partial S_0^2} =
+        \frac{1}{S_0}\frac{\varphi(d_1)}{\sigma  \sqrt{T}}
+    \end{equation}
+
+    \item \textbf{Vega} Let $\nu$ be a rate of change of option value $V$ with respect to the change in the volatility $\sigma$
+
+    \begin{equation}
+        \nu = \frac{\partial V}{\partial \sigma}
+    \end{equation}
+
+    with specific case for BS European Call Option:
+
+    \begin{equation}\label{vega_c}
+        \nu_C = \frac{\partial C}{\partial \sigma} = \varphi(d_1) S_0 \sqrt{T} 
+    \end{equation}
+
+    \item \textbf{Rho} Let $\rho$ be a rate of change of option value $V$ with respect to the change in the interest rate $r$
+
+    \begin{equation}
+        \rho = \frac{\partial V}{\partial r}
+    \end{equation}
+
+    with specific case for BS European Call Option:
+
+    \begin{equation}\label{rho_c}
+        \rho_C = \frac{\partial C}{\partial r} 
+        = T K e^{-rT} \Phi(d_2)
+    \end{equation}
+
+    
+    
+\end{enumerate}
+
+
+
+
+\item \textbf{Black-Scholes Model} According to Black-Scholes (BS) formula price of the European Call Option $C$ and price of the European Put Option $P$ at time $t = 0$ are given by the equations \cite{davis2010black}
+
+
+\begin{align}\label{pc}
+     C = \Phi(d_1)S_0 - \Phi(d_2)Ke^{-rT},\\
+     P = -\Phi(-d_1)S_0 - \Phi(d_2)Ke^{-rT},
+\end{align}
+
+with coefficients:
+\begin{equation}
+\begin{split}\label{d}
+     d_1 &= \frac{1}{\sigma\sqrt{T}}\left[\log\left(\frac{S_t}{K}\right) + \left(r + \frac{\sigma^2}{2}\right)(T)\right], \\
+     d_2 &= d_1 - \sigma\sqrt{T}. \\
+\end{split}
+\end{equation}
+
+In \eqref{pc} $\Phi(d)$ stands for standard, normal cumulative distribution function (CDF), so it's probability density function (PDF) can be written as
+
+\begin{equation}\label{pdf}
+\frac{\partial \Phi(d)}{\partial d} = \varphi(d) = 
+\frac{1}{\sqrt{2\pi}}  e^{-d^2/2}.
+\end{equation}
+
+Definitions of $C$ and $P$ are related to each other via so called put-call parity
+
+\begin{equation}
+    P = C + K e^{-rT}
+\end{equation}
+
+\item \textbf{Important identities}
+
+In this section i provide proofs for some important identities that are used in solution.
+
+\begin{enumerate}
+
+    \item Relation between derivatives of $d_1$ and $d_2$ with respect to $S_0$
+    \begin{equation}\label{help1}
+        \frac{\partial d_1}{\partial S_0} = \frac{\partial d_2}{\partial S_0}.
+    \end{equation}
+    \textbf{Proof}: Just by looking at \eqref{d} it is clear that \eqref{help1} is true.  $\blacksquare$
+
+     \item Relation between derivatives of $d_1$ and $d_2$ with respect to volatility term $\sigma$
+    \begin{equation}\label{help2}
+        \frac{\partial d_1}{\partial \sigma} = \frac{\partial d_2}{\partial \sigma} + \sqrt{T}.
+    \end{equation}
+    \textbf{Proof}: Differentiating both sides of \eqref{d} with respect to $\sigma$ leads to \eqref{help2}.  $\blacksquare$
+
+    \item Relation between PDFs $\varphi(d_1)$ and $\varphi(d_2)$
+    \begin{equation}\label{identity1}
+        \varphi(d_2) =\frac{S_0}{K} e^{rT} \varphi(d_1)
+    \end{equation}
+    \textbf{Proof}: It is trival that difference of squares
+    
+    \begin{equation}
+        d_2^2 - d_1^2 = (d_2-d_1)(d_2 + d_1).
+    \end{equation}
+    
+    Using the relations given by \eqref{d} one can obtain:
+
+    \begin{equation}
+    \begin{split}\label{identity0}
+        d_1^2 - d_2^2 &=  - \sigma \sqrt{T} \left( 2 d_1 - \sigma \sqrt{T} \right) \\
+        &=  - \sigma \sqrt{T} \left( \frac{2}{\sigma\sqrt{T}}\left[\log\left(\frac{S_0}{K}\right) + \left(r + \frac{\sigma^2}{2}\right)T\right]  - \sigma \sqrt{T} \right)\\
+        &=  -2 \left(\log\left(\frac{S_0}{K}\right) + \left(r + \frac{\sigma^2}{2}\right)T  - \sigma^2 T \right) \\
+        &=  -2 \left( \log\left(\frac{S_0}{K}\right) + 2rT + \sigma^2 T  - \sigma^2 T \right)\\
+        &=  -2 \left( \log\left(\frac{S_0}{K}\right) + rT \right).\\
+    \end{split}
+    \end{equation}
+
+    By using the definiton of PDFs \eqref{pdf} and calculating $\log(\varphi(d_1)/ \varphi(d_2))$:
+
+    \begin{equation}
+    \begin{split}\label{identity2}
+        \log \left( \frac{\varphi(d_1)}{\varphi(d_2)} \right)
+        & = \log \left( e^{-d_1^2/2} \right) - \log \left( e^{-d_2^2/2} \right) \\
+        & = \frac{1}{2} \left( d_2^2 - d_1^2 \right).
+    \end{split}
+    \end{equation}
+
+    Combining equations \eqref{identity0} and \eqref{identity2}
+
+    \begin{equation}
+    \begin{split}
+    \log \left( \frac{\varphi(d_1)}{\varphi(d_2)} \right) = -\log\left(\frac{S_0}{K}\right) - rT, \\
+    \frac{\varphi(d_1)}{\varphi(d_2)} = \frac{K}{S_0} e^{-rT}, \\
+    \varphi(d_2) =\frac{S_0}{K} e^{rT} \varphi(d_1) ,
+    \end{split}
+    \end{equation}
+
+    what ends the proof. $\blacksquare$
+    
+\end{enumerate}
+
+
+
+
+
+
+\item \textbf{Solutions}
+
+\begin{itemize}
+    \item \textbf{Ex 5} Derivation of $\Delta$
+
+We obtain $\Delta_C$ by calculating derivative of \eqref{pc} with respect to $S_0$. Index 'C' informs that this parameter is calculated for European Call Option. By using the fact \eqref{help1} we obtain
+
+
+\begin{equation}
+\begin{split}
+ \label{delta_c}
+        \Delta_C &= \frac{\partial}{\partial S_0} 
+    \left[ \Phi(d_1)S_0 - \Phi(d_2)Ke^{-rT} \right] \\
+        &= \Phi(d_1) + 
+    \frac{\partial \Phi(d_1) }{\partial d_1} \frac{\partial d_1}{\partial S_0} S_0
+    - \frac{\partial \Phi(d_2) }{\partial d_2} \frac{\partial d_2}{\partial S_0}
+    Ke^{-rT} \\
+        &= \Phi(d_1) + 
+     \frac{\partial d_1}{\partial S_0} \left[ 
+     \frac{\partial \Phi(d_1) }{\partial d_1}S_0
+     - \frac{\partial \Phi(d_2) }{\partial d_2}Ke^{-rT}
+     \right] \\
+      &= \Phi(d_1) + 
+     \frac{\partial d_1}{\partial S_0} \left[ 
+     \varphi(d_1)S_0
+     -\varphi(d_2)Ke^{-rT}
+     \right]. \\   
+\end{split}
+\end{equation}
+
+Now substituting \eqref{identity1} to \eqref{delta_c} we obtain the explicit form of $\Delta_C$
+
+\begin{equation}
+\begin{split}
+ \label{delta_c1}
+        \Delta_C &=  \Phi(d_1) + 
+     \frac{\partial d_1}{\partial S_0} \left[ 
+     \varphi(d_1)S_0
+     -\varphi(d_2)Ke^{-rT}
+     \right]\\   
+     &=  \Phi(d_1) + 
+     \frac{\partial d_1}{\partial S_0} \left[ 
+     \varphi(d_1)S_0
+     -\frac{S_0}{K} e^{rT} \varphi(d_1) Ke^{-rT}
+     \right]\\  
+     &=  \Phi(d_1) + 
+     \frac{\partial d_1}{\partial S_0} \left[ 
+     \varphi(d_1)S_0
+     -\varphi(d_1) S_0
+     \right]\\ 
+     &=  \Phi(d_1) \blacksquare
+\end{split}
+\end{equation}
+
+\item \textbf{Ex 6} Derivation of $\Gamma$
+
+We obtain $\Gamma_C$ by calculating derivative of \eqref{delta_c1} with respect to $S_0$. Index 'C' informs that this parameter is calculated for ECO
+
+\begin{equation}
+\begin{split}\label{gamma}
+        \Gamma_C &= \frac{\partial \Delta_C}{\partial S_0}
+        = \frac{\partial \Phi(d_1)}{\partial S_0} \\
+        &= \frac{\partial  \Phi(d_1)}{\partial d_1} 
+        \frac{\partial  d_1}{\partial S_0} 
+        = \varphi(d_1) \frac{1}{\sigma \sqrt{T}}\frac{\partial }{\partial S_0}  \left[ \log\left(\frac{S_0}{K}\right) \right] \\
+        &= \frac{1}{S_0}\frac{\varphi(d_1)}{\sigma  \sqrt{T}} \blacksquare\end{split}
+\end{equation}
+
+\item \textbf{Ex 7} Derivation of $\nu$
+
+By the definition \eqref{vega_c} we have:
+
+\begin{equation}
+\begin{split}\label{vega_c1}
+        \nu_C &= \frac{\partial C}{\partial \sigma}
+        = \frac{\partial }{\partial \sigma} 
+        \left[ \Phi(d_1)S_0 - \Phi(d_2)Ke^{-rT} \right] \\
+        &= \frac{\partial \Phi(d_1) }{\partial d_1} \frac{\partial d_1}{\partial \sigma} S_0
+    - \frac{\partial \Phi(d_2) }{\partial d_2} \frac{\partial d_2}{\partial \sigma}
+    Ke^{-rT}\\
+        &= \varphi(d_1) \frac{\partial d_1}{\partial \sigma} S_0
+    - \varphi(d_2) \frac{\partial d_2}{\partial \sigma}
+    Ke^{-rT}\\
+\end{split}
+\end{equation}
+
+Now using identities \eqref{help2} and \eqref{identity1}
+
+\begin{equation}
+\begin{split}\label{vega_c1}
+    \nu_C &= \varphi(d_1) S_0 \left( \frac{\partial d_2}{\partial \sigma} + \sqrt{T} \right)
+    - \frac{S_0}{K} e^{rT} \varphi(d_1) \frac{\partial d_2}{\partial \sigma}
+    Ke^{-rT}\\
+    &= \varphi(d_1) S_0 \sqrt{T} 
+    + \varphi(d_1) S_0 \frac{\partial d_2}{\partial \sigma}
+    - \varphi(d_1) S_0 \frac{\partial d_2}{\partial \sigma} \\
+    &= \varphi(d_1) S_0 \sqrt{T}. \blacksquare
+\end{split}
+\end{equation}
+
+\end{itemize}
+\end{enumerate}
+
+\bibliography{bib} 
+\bibliographystyle{ieeetr}
+
+
+\end{document}
